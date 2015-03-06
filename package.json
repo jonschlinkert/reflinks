@@ -1,0 +1,41 @@
+{
+  "name": "reflinks",
+  "description": "Generate reference links for a glob of markdown files, allowing you to more easily create references from one file to another.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jonschlinkert/reflinks",
+  "author": {
+    "name": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jonschlinkert/reflinks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/reflinks/issues"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/jonschlinkert/reflinks/blob/master/LICENSE"
+  },
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "globby": "^1.2.0",
+    "markdown-utils": "^0.4.0",
+    "relative": "^2.0.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "keywords": []
+}
