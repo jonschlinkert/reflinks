@@ -8,7 +8,7 @@
 'use strict';
 
 var path = require('path');
-var globby = require('globby');
+var glob = require('matched');
 var relative = require('relative');
 var mdu = require('markdown-utils');
 var cache = {};
@@ -19,14 +19,13 @@ var cache = {};
 
 module.exports = reflinks;
 
-
 /**
  * Generate a list of reflinks for a `glob` of files,
  * relative to the specified `dest` file.
  *
- * @param  {String|Array} `glob` Glob patterns to pass to [globby].
+ * @param  {String|Array} `glob` Glob patterns to pass to [matched][].
  * @param  {String} `dest`
- * @param  {String} `opts` Options to pass to [globby].
+ * @param  {String} `opts` Options to pass to [matched][].
  * @return {String} List of reflinks.
  */
 
@@ -43,7 +42,7 @@ function reflinks(glob, dest, opts) {
 }
 
 function expand(glob, options) {
-  return cache[glob] || (cache[glob] = globby.sync(glob, options));
+  return cache[glob] || (cache[glob] = glob.sync(glob, options));
 }
 
 function linkify(fp, dest, opts) {
