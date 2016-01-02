@@ -41,8 +41,8 @@ function reflinks(glob, dest, opts) {
   }, '');
 }
 
-function expand(glob, options) {
-  return cache[glob] || (cache[glob] = glob.sync(glob, options));
+function expand(pattern, options) {
+  return cache[pattern] || (cache[pattern] = glob.sync(pattern, options));
 }
 
 function linkify(fp, dest, opts) {

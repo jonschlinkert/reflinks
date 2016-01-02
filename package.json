@@ -1,23 +1,14 @@
 {
   "name": "reflinks",
-  "description": "Generate reference links for a glob of markdown files, allowing you to more easily create references from one file to another.",
+  "description": "Generate (relative) reference links for a glob of markdown files, allowing you to more easily create references from one file to another.",
   "version": "0.1.1",
   "homepage": "https://github.com/jonschlinkert/reflinks",
-  "author": {
-    "name": "Jon Schlinkert",
-    "url": "https://github.com/jonschlinkert"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jonschlinkert/reflinks.git"
-  },
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/reflinks",
   "bugs": {
     "url": "https://github.com/jonschlinkert/reflinks/issues"
   },
-  "license": {
-    "type": "MIT",
-    "url": "https://github.com/jonschlinkert/reflinks/blob/master/LICENSE"
-  },
+  "license": "MIT",
   "files": [
     "index.js"
   ],
@@ -29,12 +20,38 @@
     "test": "mocha"
   },
   "dependencies": {
-    "globby": "^1.2.0",
-    "markdown-utils": "^0.4.0",
-    "relative": "^2.0.0"
+    "markdown-utils": "^0.7.1",
+    "matched": "^0.4.0",
+    "relative": "^3.0.2"
   },
   "devDependencies": {
+    "gulp-format-md": "^0.1.4",
     "mocha": "*",
     "should": "*"
+  },
+  "keywords": [
+    "link",
+    "links",
+    "markdown",
+    "md",
+    "reference",
+    "reflink"
+  ],
+  "verb": {
+    "related": {
+      "list": [
+        "markdown-utils",
+        "remarkable"
+      ]
+    },
+    "reflinks": [
+      "markdown-utils",
+      "matched",
+      "remarkable"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "layout": "default"
   }
 }
