@@ -49,7 +49,7 @@ module.exports = function reflinks(names, options, cb) {
  */
 
 function linkify(arr, template) {
-  return arr.reduce(function (acc, obj) {
+  return arr.reduce(function(acc, obj) {
     if (typeof template === 'function') {
       var link = template(obj);
       if (link) acc.push(link);
