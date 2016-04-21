@@ -10,6 +10,10 @@ Install with [npm](https://www.npmjs.com/):
 $ npm install reflinks --save
 ```
 
+**HEADS UP!**
+
+The API was completely changed in v0.2. The main export is now an async function that expects a callback, and instead of globbing local files, reflinks are created from npm package names.
+
 ## Usage
 
 ```js
