@@ -7,17 +7,7 @@
 
 'use strict';
 
-var path = require('path');
-var glob = require('matched');
-var relative = require('relative');
-var mdu = require('markdown-utils');
-var cache = {};
-
-/**
- * Expose `reflinks`
- */
-
-module.exports = reflinks;
+var utils = require('./lib/utils');
 
 /**
  * Generate a list of reflinks for a `glob` of files,
@@ -29,27 +19,42 @@ module.exports = reflinks;
  * @return {String} List of reflinks.
  */
 
-function reflinks(glob, dest, opts) {
-  if (typeof dest !== 'string') {
-    throw new TypeError('reflinks expects a string.');
+module.exports = function reflinks(names, options, cb) {
+  if (typeof options === 'function') {
+    cb = options;
+    options = {};
   }
 
-  return expand(glob, opts).reduce(function (acc, fp) {
-    acc += '\n';
-    acc += linkify(fp, dest, opts);
+  options = options || {};
+  var time = new utils.Time();
+  var log = utils.log;
+  var name = options.spinnerName || 'reflinks';
+  var start = options.spinnerStart || 'creating reference links from npm data';
+  var stop = options.spinnerStop || 'created reference links from npm data';
+
+  // start spinner
+  log.spinner.startTimer(time, name, start, options);
+
+  utils.pkgs(names, options, function(err, arr) {
+    if (err) return cb(err);
+
+    // stop spinner
+    log.spinner.stopTimer(time, name, stop, options);
+    cb(null, linkify(arr, options.template));
+  });
+}
+
+/**
+ * Create a formatted reflink
+ */
+
+function linkify(arr, template) {
+  return arr.reduce(function (acc, obj) {
+    if (typeof template === 'function') {
+      var link = template(obj);
+      if (link) acc.push(link);
+    }
+    acc.push(`[${obj.name}]: ${obj.homepage || obj.repository}`);
     return acc;
-  }, '');
-}
-
-function expand(pattern, options) {
-  return cache[pattern] || (cache[pattern] = glob.sync(pattern, options));
-}
-
-function linkify(fp, dest, opts) {
-  return mdu.reference(titleize(fp, opts), relative(dest, fp));
-}
-
-function titleize(fp, opts) {
-  if (opts && opts.titleize) return opts.titleize(fp);
-  return path.basename(fp, path.extname(fp));
+  }, []);
 }
