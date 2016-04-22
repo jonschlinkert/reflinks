@@ -53,8 +53,10 @@ function linkify(arr, template) {
     if (typeof template === 'function') {
       var link = template(obj);
       if (link) acc.push(link);
+      return acc;
     }
-    acc.push(`[${obj.name}]: ${obj.homepage || obj.repository}`);
+    var str = `[${obj.name}]: ${obj.homepage || obj.repository}`;
+    acc.push(str.replace(/#readme$/, ''));
     return acc;
   }, []);
 }
