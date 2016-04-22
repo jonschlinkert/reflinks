@@ -45,20 +45,29 @@
     "reflink"
   ],
   "verb": {
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "reflinks": [
+      "markdown-utils",
+      "matched",
+      "remarkable",
+      "pkg-cache",
+      "verb"
+    ],
     "related": {
       "list": [
         "markdown-utils",
         "remarkable"
       ]
     },
-    "reflinks": [
-      "markdown-utils",
-      "matched",
-      "remarkable"
+    "layout": "default",
+    "toc": false,
+    "tasks": [
+      "readme"
     ],
-    "plugins": [
-      "gulp-format-md"
-    ],
-    "layout": "default"
+    "lint": {
+      "reflinks": true
+    }
   }
 }
