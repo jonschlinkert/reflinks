@@ -49,14 +49,16 @@ module.exports = function reflinks(names, options, cb) {
  */
 
 function linkify(arr, template) {
-  return arr.reduce(function(acc, obj) {
-    if (typeof template === 'function') {
-      var link = template(obj);
-      if (link) acc.push(link);
-      return acc;
+  return arr.reduce(function(acc, pkg) {
+    pkg.homepage = utils.homepage(pkg);
+
+    var link = typeof template !== 'function'
+      ? utils.link(pkg.name, pkg.homepage)
+      : template(pkg);
+
+    if (link) {
+      acc.push(link.replace(/#readme$/, ''));
     }
-    var str = `[${obj.name}]: ${obj.homepage || obj.repository}`;
-    acc.push(str.replace(/#readme$/, ''));
     return acc;
   }, []);
 }
