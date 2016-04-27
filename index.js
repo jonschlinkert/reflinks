@@ -40,7 +40,7 @@ module.exports = function reflinks(names, options, cb) {
 
     // stop spinner
     log.spinner.stopTimer(time, name, stop, options);
-    cb(null, linkify(arr, options.template));
+    cb(null, linkify(arr, options));
   });
 }
 
@@ -48,13 +48,13 @@ module.exports = function reflinks(names, options, cb) {
  * Create a formatted reflink
  */
 
-function linkify(arr, template) {
+function linkify(arr, options) {
   return arr.reduce(function(acc, pkg) {
     pkg.homepage = utils.homepage(pkg);
 
-    var link = typeof template !== 'function'
+    var link = typeof options.template !== 'function'
       ? utils.link(pkg.name, pkg.homepage)
-      : template(pkg);
+      : options.template(pkg, options);
 
     if (link) {
       acc.push(link.replace(/#readme$/, ''));
