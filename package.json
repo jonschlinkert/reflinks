@@ -1,7 +1,7 @@
 {
   "name": "reflinks",
   "description": "Generate (relative) reference links for a glob of markdown files, allowing you to more easily create references from one file to another.",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "homepage": "https://github.com/jonschlinkert/reflinks",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/reflinks",
