@@ -1,7 +1,7 @@
 {
   "name": "reflinks",
   "description": "Generate (relative) reference links for a glob of markdown files, allowing you to more easily create references from one file to another.",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "homepage": "https://github.com/jonschlinkert/reflinks",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/reflinks",
@@ -24,7 +24,9 @@
     "debug": "^2.2.0",
     "lazy-cache": "^1.0.3",
     "log-utils": "^0.1.2",
+    "markdown-link": "^0.1.1",
     "pkg-cache": "^0.1.3",
+    "pkg-homepage": "^0.1.1",
     "time-diff": "^0.2.1"
   },
   "devDependencies": {
