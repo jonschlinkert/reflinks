@@ -53,7 +53,7 @@ function linkify(arr, options) {
     pkg.homepage = utils.homepage(pkg);
 
     var link = typeof options.template !== 'function'
-      ? utils.link(pkg.name, pkg.homepage)
+      ? utils.reference(pkg.name, pkg.homepage)
       : options.template(pkg, options);
 
     if (link) {
