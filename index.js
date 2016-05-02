@@ -7,7 +7,7 @@
 
 'use strict';
 
-var utils = require('./lib/utils');
+var utils = require('./utils');
 
 /**
  * Generate a list of reflinks for a `glob` of files,

@@ -2,7 +2,6 @@
 
 require('mocha');
 var assert = require('assert');
-var utils = require('./lib/utils');
 var reflinks = require('./');
 
 describe('reflinks', function() {
