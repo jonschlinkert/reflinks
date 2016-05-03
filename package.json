@@ -11,7 +11,7 @@
   "license": "MIT",
   "files": [
     "index.js",
-    "lib"
+    "utils.js"
   ],
   "main": "index.js",
   "engines": {
@@ -52,8 +52,8 @@
     "reflinks": [
       "markdown-utils",
       "matched",
-      "remarkable",
       "pkg-cache",
+      "remarkable",
       "verb"
     ],
     "related": {
