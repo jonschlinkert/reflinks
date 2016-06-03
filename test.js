@@ -18,4 +18,8 @@ describe('reflinks', function() {
       cb();
     });
   });
+
+  it('should not choke on packages that do not exist', function(cb) {
+    reflinks('fofofofoofofofo', cb);
+  });
 });

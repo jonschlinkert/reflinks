@@ -7,6 +7,7 @@
 
 'use strict';
 
+var ora = require('ora');
 var utils = require('./utils');
 
 /**
@@ -28,18 +29,22 @@ module.exports = function reflinks(names, options, cb) {
   options = options || {};
   var time = new utils.Time();
   var log = utils.log;
-  var name = options.spinnerName || 'reflinks';
-  var start = options.spinnerStart || 'creating reference links from npm data';
-  var stop = options.spinnerStop || 'created reference links from npm data';
+  var color = options.color || 'green';
+  var start = options.starting || 'creating reference links from npm data';
+  var stop = options.finished || 'created reference links from npm data';
 
-  // start spinner
-  log.spinner.startTimer(time, name, start, options);
-
+  var spinner = ora(start).start();
   utils.pkgs(names, options, function(err, arr) {
-    if (err) return cb(err);
+    spinner.color = color;
+    spinner.text = stop;
+    spinner.stop();
 
-    // stop spinner
-    log.spinner.stopTimer(time, name, stop, options);
+    if (err) {
+      // let the implementor decide what to do when a package doesn't exist
+      cb(err, arr);
+      return;
+    }
+
     cb(null, linkify(arr, options));
   });
 }
@@ -49,9 +54,10 @@ module.exports = function reflinks(names, options, cb) {
  */
 
 function linkify(arr, options) {
-  return arr.reduce(function(acc, pkg) {
-    pkg.homepage = utils.homepage(pkg);
+  return utils.arrayify(arr).reduce(function(acc, pkg) {
+    if (!pkg.name) return acc;
 
+    pkg.homepage = utils.homepage(pkg);
     var link = typeof options.template !== 'function'
       ? utils.reference(pkg.name, pkg.homepage)
       : options.template(pkg, options);

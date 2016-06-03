@@ -11,6 +11,10 @@ require('pkg-homepage', 'homepage');
 require('markdown-reference', 'reference');
 require = fn;
 
+utils.arrayify = function(val) {
+  return val ? (Array.isArray(val) ? val : [val]) : [];
+};
+
 /**
  * Expose utils
  */
