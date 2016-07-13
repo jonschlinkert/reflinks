@@ -26,16 +26,16 @@ module.exports = function reflinks(names, options, cb) {
     options = {};
   }
 
-  options = options || {};
-  var dates = new utils.Dates('dates/reflinks', options);
-  var store = new utils.Store('store/reflinks', options);
+  var dates = new utils.Dates('dates/reflinks');
+  var store = new utils.Store('store/reflinks');
   var time = new utils.Time();
 
+  var opts = utils.extend({}, options);
   var log = utils.log;
-  var color = options.color || 'green';
-  var start = options.starting || 'creating reference links from npm data';
-  var stop = options.finished || 'created reference links from npm data';
-  var timespan = options.timespan || '1 week ago';
+  var color = opts.color || 'green';
+  var start = opts.starting || 'creating reference links from npm data';
+  var stop = opts.finished || 'created reference links from npm data';
+  var timespan = opts.timespan || '1 week ago';
 
   var spinner = ora(start).start();
   var pkgs = [];
@@ -78,7 +78,7 @@ module.exports = function reflinks(names, options, cb) {
       return;
     }
 
-    var res = linkify(pkgs, options);
+    var res = linkify(pkgs, opts);
     res.links.sort(function(a, b) {
       return a.localeCompare(b);
     });

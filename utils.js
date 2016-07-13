@@ -8,6 +8,7 @@ require('async-each', 'each');
 require('time-diff', 'Time');
 require('log-utils', 'log');
 require('get-pkg', 'pkg');
+require('extend-shallow', 'extend');
 require('pkg-homepage', 'homepage');
 require('markdown-reference', 'reference');
 require('date-store', 'Dates');

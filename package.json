@@ -26,6 +26,7 @@
     "async-each": "^1.0.0",
     "data-store": "^0.16.1",
     "date-store": "^0.1.2",
+    "extend-shallow": "^2.0.1",
     "get-pkg": "^0.3.0",
     "lazy-cache": "^2.0.1",
     "log-utils": "^0.2.1",
@@ -61,7 +62,8 @@
       "matched",
       "pkg-cache",
       "remarkable",
-      "verb"
+      "verb",
+      "verb-readme-generator"
     ],
     "related": {
       "list": [
