@@ -77,7 +77,13 @@ module.exports = function reflinks(names, options, cb) {
       cb(err, pkgs);
       return;
     }
-    cb(null, linkify(pkgs, options));
+
+    var res = linkify(pkgs, options);
+    res.links.sort(function(a, b) {
+      return a.localeCompare(b);
+    });
+
+    cb(null, res);
   });
 };
 
