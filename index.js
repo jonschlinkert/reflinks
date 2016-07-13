@@ -27,33 +27,66 @@ module.exports = function reflinks(names, options, cb) {
   }
 
   options = options || {};
+  var dates = new utils.Dates('dates/reflinks', options);
+  var store = new utils.Store('store/reflinks', options);
   var time = new utils.Time();
+
   var log = utils.log;
   var color = options.color || 'green';
   var start = options.starting || 'creating reference links from npm data';
   var stop = options.finished || 'created reference links from npm data';
+  var timespan = options.timespan || '1 week ago';
 
   var spinner = ora(start).start();
-  utils.pkgs(names, options, function(err, arr) {
+  var pkgs = [];
+
+  utils.each(utils.arrayify(names), function(name, next) {
+    if (utils.isCached(dates, name, timespan)) {
+      if (store.has(name)) pkgs.push(store.get(name));
+      next();
+      return;
+    }
+    utils.pkg(name, function(err, pkg) {
+      if (err) {
+        if (err.message === 'document not found') {
+          dates.set(name, {});
+          next();
+          return;
+        }
+        next(err);
+        return;
+      }
+
+      dates.set(name, pkg);
+      store.set(name, pkg);
+      pkgs.push(pkg);
+      next();
+    });
+  }, function(err) {
+    if (err) {
+      cb(err);
+      return;
+    }
+
     spinner.color = color;
     spinner.text = stop;
     spinner.stop();
 
     if (err) {
       // let the implementor decide what to do when a package doesn't exist
-      cb(err, arr);
+      cb(err, pkgs);
       return;
     }
-
-    cb(null, linkify(arr, options));
+    cb(null, linkify(pkgs, options));
   });
-}
+};
 
 /**
  * Create a formatted reflink
  */
 
 function linkify(arr, options) {
+  var obj = {links: [], cache: {}, pkgs: {}};
   return utils.arrayify(arr).reduce(function(acc, pkg) {
     if (!pkg.name) return acc;
 
@@ -63,8 +96,11 @@ function linkify(arr, options) {
       : options.template(pkg, options);
 
     if (link) {
-      acc.push(link.replace(/#readme$/, ''));
+      var res = link.replace(/#readme$/, '');
+      acc.links.push(res);
+      acc.cache[pkg.name] = res;
+      acc.pkgs[pkg.name] = pkg;
     }
     return acc;
-  }, []);
+  }, obj);
 }
