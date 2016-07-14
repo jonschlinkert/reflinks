@@ -2,8 +2,6 @@
 
 Generate (relative) reference links for a glob of markdown files, allowing you to more easily create references from one file to another.
 
-## Table of Contents
-
 ## Install
 
 Install with [npm](https://www.npmjs.com/):
@@ -22,7 +20,7 @@ The API was completely changed in v0.2. The main export is now an async function
 var reflinks = require('reflinks');
 
 reflinks(['base', 'verb', 'generate'], function(err, links) {
-  if (err) throw err;
+  if (err) return console.log(err);
   console.log(links);
   // results in:
   // [ '[generate]: https://github.com/generate/generate',
@@ -32,6 +30,22 @@ reflinks(['base', 'verb', 'generate'], function(err, links) {
 ```
 
 By default results are cached for 7 days. See [pkg-cache](https://github.com/jonschlinkert/pkg-cache) for more details and API documentation related to caching packages.
+
+## Options
+
+### reflinksCache
+
+Disable caching.
+
+**Type**: `Boolean`
+
+**Default**: `undefined`
+
+```js
+reflinks(['base'], {reflinksCache: false}, function(err, links) {
+  if (err) return console.log(err);
+});
+```
 
 ## About
 
