@@ -29,11 +29,9 @@
     "extend-shallow": "^2.0.1",
     "get-pkg": "^0.3.0",
     "lazy-cache": "^2.0.1",
-    "log-utils": "^0.2.1",
     "markdown-reference": "^0.1.0",
     "ora": "^0.2.3",
-    "pkg-homepage": "^0.1.1",
-    "time-diff": "^0.3.1"
+    "pkg-homepage": "^0.1.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

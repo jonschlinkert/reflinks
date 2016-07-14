@@ -5,8 +5,6 @@ var fn = require;
 require = utils;
 
 require('async-each', 'each');
-require('time-diff', 'Time');
-require('log-utils', 'log');
 require('get-pkg', 'pkg');
 require('extend-shallow', 'extend');
 require('pkg-homepage', 'homepage');

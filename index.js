@@ -28,10 +28,8 @@ module.exports = function reflinks(names, options, cb) {
 
   var dates = new utils.Dates('dates/reflinks');
   var store = new utils.Store('store/reflinks');
-  var time = new utils.Time();
 
   var opts = utils.extend({}, options);
-  var log = utils.log;
   var color = opts.color || 'green';
   var start = opts.starting || 'creating reference links from npm data';
   var stop = opts.finished || 'created reference links from npm data';
@@ -41,11 +39,12 @@ module.exports = function reflinks(names, options, cb) {
   var pkgs = [];
 
   utils.each(utils.arrayify(names), function(name, next) {
-    if (utils.isCached(dates, name, timespan)) {
+    if (utils.isCached(dates, name, timespan) && opts.reflinksCache !== false) {
       if (store.has(name)) pkgs.push(store.get(name));
       next();
       return;
     }
+
     utils.pkg(name, function(err, pkg) {
       if (err) {
         if (err.message === 'document not found') {
