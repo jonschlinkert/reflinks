@@ -88,7 +88,13 @@ module.exports = function reflinks(names, options, cb) {
       return;
     }
 
-    var res = linkify(pkgs, opts);
+    try {
+      var res = linkify(pkgs, opts);
+    } catch (err) {
+      cb(err);
+      return;
+    }
+
     res.links.sort(function(a, b) {
       return a.localeCompare(b);
     });
@@ -107,6 +113,10 @@ function linkify(arr, options) {
     if (!pkg.name) return acc;
 
     pkg.homepage = utils.homepage(pkg);
+    if (!pkg.name || !pkg.homepage) {
+      return acc;
+    }
+
     var link = typeof options.template !== 'function'
       ? utils.reference(pkg.name, pkg.homepage)
       : options.template(pkg, options);
