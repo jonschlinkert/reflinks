@@ -1,28 +1,21 @@
 'use strict';
 
-var utils = require('lazy-cache')(require);
-var fn = require;
-require = utils;
+define(exports, 'each', () => require('async-each'));
+define(exports, 'pkg', () => require('get-pkg'));
+define(exports, 'extend', () => require('extend-shallow'));
+define(exports, 'homepage', () => require('pkg-homepage'));
+define(exports, 'reference', () => require('markdown-reference'));
+define(exports, 'Dates', () => require('date-store'));
+define(exports, 'Store', () => require('data-store'));
 
-require('async-each', 'each');
-require('get-pkg', 'pkg');
-require('extend-shallow', 'extend');
-require('pkg-homepage', 'homepage');
-require('markdown-reference', 'reference');
-require('date-store', 'Dates');
-require('data-store', 'Store');
-require = fn;
+function define(obj, key, fn) {
+  Object.defineProperty(obj, key, { get: fn });
+}
 
-utils.arrayify = function(val) {
+exports.arrayify = function(val) {
   return val ? (Array.isArray(val) ? val : [val]) : [];
 };
 
-utils.isCached = function(store, name, timespan) {
+exports.isCached = function(store, name, timespan) {
   return store.has(name) && store.lastSaved(name).lessThan(timespan);
 };
-
-/**
- * Expose utils
- */
-
-module.exports = utils;
