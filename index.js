@@ -1,115 +1,95 @@
-/*!
- * reflinks <https://github.com/jonschlinkert/reflinks>
- *
- * Copyright (c) 2015-2018, Jon Schlinkert.
- * Released under the MIT License.
- */
-
 'use strict';
 
-var ora = require('ora');
-var utils = require('./utils');
+const ora = require('ora');
+const util = require('util');
+const utils = require('./utils');
 
 /**
- * Generate a list of reflinks for a `glob` of files,
- * relative to the specified `dest` file.
+ * Generate a list of reflinks for a `glob` of files, relative
+ * to the specified `dest` file.
  *
- * @param  {String|Array} `glob` Glob patterns to pass to [matched][].
- * @param  {String} `dest`
- * @param  {String} `opts` Options to pass to [matched][].
+ * @param {String|Array} `glob` Glob patterns to pass to [matched][].
+ * @param {String} `dest`
+ * @param {String} `opts` Options to pass to [matched][].
+ * @param {Function} `callback` (optional) Returns a promise if a callback is not passed.
  * @return {String} List of reflinks.
  */
 
-module.exports = function reflinks(names, options, cb) {
+module.exports = async(name, options, cb) => {
   if (typeof options === 'function') {
     cb = options;
     options = {};
   }
 
-  var dates = new utils.Dates('reflinks-dates-cache');
-  var store = new utils.Store('reflinks-names-cache');
-
-  var opts = utils.extend({}, options);
-  if (opts.reflinksCache === false) {
-    opts.cache = false;
-  }
-  if (opts.clearCache === true) {
-    dates.del({force: true});
-    store.del({force: true});
+  const promise = reflinks(name, options);
+  if (typeof cb === 'function') {
+    promise.then(res => cb(null, res)).catch(cb);
+    return;
   }
 
-  var color = opts.color || 'green';
-  var start = opts.starting || 'creating reference links from npm data';
-  var stop = opts.finished || 'created reference links from npm data';
-  var timespan = opts.timespan || '1 week ago';
+  return promise;
+};
 
-  var spinner = ora(start).start();
-  var pkgs = [];
+async function reflinks(names, options = {}) {
+  const dates = new utils.Dates('reflinks-dates-cache');
+  const store = new utils.Store('reflinks-names-cache');
 
-  utils.each(utils.arrayify(names), function(name, next) {
-    if (utils.isCached(dates, name, timespan) && opts.cache !== false) {
-      var val = store.get(name);
-      if (val) {
-        pkgs.push(val);
-        next();
-        return;
+  if (options.reflinksCache === false) {
+    options.cache = false;
+  }
+
+  if (options.clearCache === true) {
+    dates.clear();
+    store.clear();
+  }
+
+  const color = options.color || 'green';
+  const start = options.starting || 'creating reference links from npm data';
+  const stop = options.finished || 'created reference links from npm data';
+  const timespan = options.timespan || '1 week ago';
+  const spinner = ora(start).start();
+  const pkgs = [];
+
+  for (const name of [].concat(names || [])) {
+    if (utils.isCached(dates, name, timespan) && options.cache !== false) {
+
+      let cached = store.get(name);
+      if (cached) {
+        pkgs.push(cached);
+        continue;
       }
-    }
-
-    utils.pkg(name, function(err, pkg) {
-      if (err) {
-        if (err.message === 'document not found') {
-          dates.set(name, {});
-          next();
-          return;
-        }
-        next(err);
-        return;
-      }
-
-      dates.set(name, pkg);
-      store.set(name, pkg);
-      pkgs.push(pkg);
-      next();
-    });
-  }, function(err) {
-    if (err) {
-      cb(err);
-      return;
-    }
-
-    spinner.color = color;
-    spinner.text = stop;
-    spinner.stop();
-
-    if (err) {
-      // let the implementor decide what to do when a package doesn't exist
-      cb(err, pkgs);
-      return;
     }
 
     try {
-      var res = linkify(pkgs, opts);
+      const pkg = await utils.pkg(name);
+      dates.set(name, pkg);
+      store.set(name, pkg);
+      pkgs.push(pkg);
     } catch (err) {
-      cb(err);
-      return;
+      if (err.message === 'document not found') {
+        dates.set(name, {});
+        continue;
+      }
+      throw err;
     }
+  }
 
-    res.links.sort(function(a, b) {
-      return a.localeCompare(b);
-    });
+  spinner.color = color;
+  spinner.text = stop;
+  spinner.stop();
 
-    cb(null, res);
-  });
-};
+  const res = linkify(pkgs, options);
+  res.links.sort((a, b) => a.localeCompare(b));
+  return res;
+}
 
 /**
  * Create a formatted reflink
  */
 
 function linkify(arr, options) {
-  var obj = {links: [], cache: {}, pkgs: {}};
-  return utils.arrayify(arr).reduce(function(acc, pkg) {
+  const obj = { links: [], cache: {}, pkgs: {} };
+  return [].concat(arr || []).reduce(function(acc, pkg) {
     if (!pkg.name) return acc;
 
     pkg.homepage = utils.homepage(pkg);
@@ -117,7 +97,7 @@ function linkify(arr, options) {
       return acc;
     }
 
-    var link = typeof options.template !== 'function'
+    const link = typeof options.template !== 'function'
       ? utils.reference(pkg.name, pkg.homepage)
       : options.template(pkg, options);
 
