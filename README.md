@@ -19,11 +19,21 @@ The API was completely changed in v0.2. The main export is now an async function
 ## Usage
 
 ```js
-var reflinks = require('reflinks');
+const reflinks = require('reflinks');
 
-reflinks(['base', 'verb', 'generate'], function(err, links) {
-  if (err) return console.log(err);
-  console.log(links);
+// returns a promise by default
+reflinks(['micromatch', 'generate'])
+  .then(res => {
+    console.log(res.links);
+    // results in:
+    //  [ '[generate]: https://github.com/generate/generate',
+    //    '[micromatch]: https://github.com/micromatch/micromatch' ]
+  })
+  .catch(console.error);
+
+// or takes a callback
+reflinks(['base', 'verb', 'generate'], function(err, res) {
+  console.log(res.links);
   // results in:
   // [ '[generate]: https://github.com/generate/generate',
   //   '[verb]: https://github.com/verbose/verb',
@@ -109,7 +119,7 @@ You might also be interested in these projects:
 
 | **Commits** | **Contributor** | 
 | --- | --- |
-| 50 | [jonschlinkert](https://github.com/jonschlinkert) |
+| 53 | [jonschlinkert](https://github.com/jonschlinkert) |
 | 4 | [stefanwalther](https://github.com/stefanwalther) |
 | 2 | [charlike-old](https://github.com/charlike-old) |
 
